@@ -1,0 +1,18 @@
+{
+  "name": "rishit-plugins",
+  "owner": { "name": "Rishit Gupta", "url": "https://github.com/Rishit30G" },
+  "metadata": {
+    "description": "Claude Code plugins by Rishit Gupta"
+  },
+  "plugins": [
+    {
+      "name": "usage-band",
+      "source": "./plugins/usage-band",
+      "description": "A live band above the Claude Code prompt: model, context, 5-hour plan limit, real prompt-cache status and session cost.",
+      "version": "1.0.0",
+      "author": { "name": "Rishit Gupta" },
+      "license": "MIT",
+      "keywords": ["status", "usage", "cost", "context", "cache"]
+    }
+  ]
+}
