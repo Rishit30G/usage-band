@@ -2,7 +2,7 @@
 
 A live status band above the Claude Code prompt. It shows what you're spending and how close you are to your limits while you work, without running `/cost` or `/context`.
 
-![usage-band](assets/band.png)
+![usage-band](assets/band-1.1.png)
 
 Works in the terminal and in the Claude desktop app's Code tab.
 
