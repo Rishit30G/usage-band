@@ -1,7 +1,7 @@
 {
   "name": "usage-band",
-  "version": "1.0.0",
-  "description": "A live band above the Claude Code prompt: model, context, 5-hour plan limit, real prompt-cache status and session cost, plus a one-click Summarize & new.",
+  "version": "1.1.0",
+  "description": "A live band above the Claude Code prompt: model, context, 5-hour and weekly plan limits, real prompt-cache status and session cost, plus a one-click Handoff.",
   "author": { "name": "Rishit Gupta", "url": "https://github.com/Rishit30G" },
   "homepage": "https://github.com/Rishit30G/usage-band",
   "repository": "https://github.com/Rishit30G/usage-band",

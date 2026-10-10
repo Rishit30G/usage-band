@@ -8,8 +8,8 @@
     {
       "name": "usage-band",
       "source": "./plugins/usage-band",
-      "description": "A live band above the Claude Code prompt: model, context, 5-hour plan limit, real prompt-cache status and session cost.",
-      "version": "1.0.0",
+      "description": "A live band above the Claude Code prompt: model, context, 5-hour and weekly plan limits, real prompt-cache status and session cost.",
+      "version": "1.1.0",
       "author": { "name": "Rishit Gupta" },
       "license": "MIT",
       "keywords": ["status", "usage", "cost", "context", "cache"]

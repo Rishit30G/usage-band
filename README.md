@@ -12,10 +12,11 @@ Works in the terminal and in the Claude desktop app's Code tab.
 |---|---|---|
 | Model | `Sonnet 5.5` | The model the session is on. |
 | Context | `███░░░░░░░ 3%   32.3k/1M` | How full the context window is. Green, then amber from 50%, red from 80%. |
-| 5-hour limit | `5h 9%   resets 11m` | Your plan's 5-hour usage window and when it resets. Adds a red `▲ full in 1h 20m` when your current pace would hit the limit before the reset. |
+| 5-hour limit | `5h 9%   11m` | Your plan's 5-hour usage window and the time until it resets. |
+| Weekly limit | `7d 32%   3d 4h` | Your plan's weekly usage window and the time until it resets. |
 | Prompt cache | `⏳ 59m   70% hit` | Time left before the prompt cache expires, and how much of the last request came from cache. See below. |
 | Cost | `💰 $0.13` | What the session would cost at API prices. |
-| Button | `Summarize & new` | Has Haiku write a hand-off summary, runs `/clear`, and puts the summary in the prompt box of the fresh session. |
+| Button | `Handoff` | Has Haiku write a handoff summary, runs `/clear`, and puts the summary in the prompt box of the fresh session. |
 
 ### The prompt cache, briefly
 
@@ -55,8 +56,8 @@ claude plugin marketplace remove rishit-plugins
 
 - **A recent Claude Code.** The band uses the plugin hooks API (`ui.render`, `$.session.usage`). Older versions won't load it.
 - **macOS or Linux.** The cache segment reads the transcript with `sh`, `tail` and `grep`. On Windows that segment stays hidden; the rest works.
-- **Plan limits need a subscription.** The 5-hour segment appears only when the API reports rate-limit data (Pro/Max plans). On API-key billing it's hidden.
-- **Summarize & new** uses a small Haiku call on your own quota.
+- **Plan limits need a subscription.** The 5-hour and weekly segments appear only when the API reports rate-limit data (Pro/Max plans). On API-key billing they're hidden.
+- **Handoff** uses a small Haiku call on your own quota.
 
 ## License
 

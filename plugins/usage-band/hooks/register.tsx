@@ -10,8 +10,7 @@ const CTX_WARN = 50
 const CTX_CRIT = 80
 const LIM_WARN = 60
 const LIM_CRIT = 85
-const WINDOW_SEC: Record<string, number> = { five_hour: 5 * 3600, seven_day: 7 * 86400 }
-const LABEL: Record<string, string> = { five_hour: '5h', seven_day: 'week', spend_limit: 'spend' }
+const LABEL: Record<string, string> = { five_hour: '5h', seven_day: '7d', spend_limit: 'spend' }
 
 // claude-sonnet-5-5 -> Sonnet 5.5; claude-haiku-4-5-20251001 -> Haiku 4.5; unknown ids pass through
 const modelName = (id: string) => {
@@ -142,11 +141,11 @@ async function tick($: any) {
 
 let isBusy = false
 
-async function summarizeAndRestart($: any) {
+async function handoff($: any) {
   if (isBusy) return
   isBusy = true
   try {
-    $.ui.toast('Summarizing session…')
+    $.ui.toast('Writing handoff…')
     const msgs = await $.session.messages()
     const transcript = msgs
       .map((m: any) => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.text}`)
@@ -154,7 +153,7 @@ async function summarizeAndRestart($: any) {
       .join('\n\n')
       .slice(-60000)
     if (!transcript) {
-      $.ui.toast('Nothing to summarize yet')
+      $.ui.toast('Nothing to hand off yet')
       return
     }
     const r = await $.model.complete({
@@ -167,16 +166,16 @@ async function summarizeAndRestart($: any) {
         transcript,
     })
     if (!r.isAnswered) {
-      $.ui.toast('Summary failed; session kept')
+      $.ui.toast('Handoff failed; session kept')
       return
     }
     await $.command.run({ command: 'clear' })
     await $.prompt.fill({
-      text: `Context from my previous session (summary):\n\n${r.text}\n\nContinue from here.`,
+      text: `Handoff from my previous session:\n\n${r.text}\n\nContinue from here.`,
     })
-    $.ui.toast('New session started. Summary is in the prompt box; press Enter to send.')
+    $.ui.toast('New session started. Handoff is in the prompt box; press Enter to send.')
   } catch {
-    $.ui.toast('Summarize failed; session kept')
+    $.ui.toast('Handoff failed; session kept')
   } finally {
     isBusy = false
   }
@@ -228,24 +227,13 @@ export const register: Register = on => {
     }
 
     for (const l of s.limits) {
-      if (l.kind === 'seven_day') continue
       const left = l.resetsAt ? Math.max(0, (Date.parse(l.resetsAt) - s.at) / 1000) : null
-      const win = WINDOW_SEC[l.kind]
-      let warn = ''
-      if (left !== null && win) {
-        const used = win - left
-        if (used > 60 && l.percentUsed > 0) {
-          const toFull = (100 - l.percentUsed) / (l.percentUsed / used)
-          if (toFull < left) warn = `full in ${dur(toFull)}`
-        }
-      }
       const c = level(l.percentUsed, LIM_WARN, LIM_CRIT)
       parts.push(
         <Text>
           <Text color={C.amber}>{LABEL[l.kind] ?? l.kind} </Text>
           <Text color={c} bold>{Math.round(l.percentUsed)}%</Text>
-          {left !== null ? <Text color={C.muted}>   resets {dur(left)}</Text> : null}
-          {warn ? <Text color={C.red} bold> ▲ {warn}</Text> : null}
+          {left !== null ? <Text color={C.muted}>   {dur(left)}</Text> : null}
         </Text>,
       )
     }
@@ -288,7 +276,7 @@ export const register: Register = on => {
     return (
       <Box justifyContent="space-between">
         <Text>{parts.flatMap((p, i) => (i ? [sep, p] : [p]))}</Text>
-        <Button key="summarize" label="Summarize & new" variant="primary" onPress={() => summarizeAndRestart($)} />
+        <Button key="handoff" label="Handoff" variant="primary" onPress={() => handoff($)} />
       </Box>
     )
   })
